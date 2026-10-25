@@ -1,0 +1,305 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLSD</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<header>
+    <button class="BButton button" onclick="window.location.href='indexx.html'">
+        <strong><h2>←</h2></strong>
+    </button>
+</header>
+<body>
+    <h1>Mobile Legends SD</h1>
+    <h4>Berikut juknis (Petunjuk Teknis) untuk bidang lomba Mobile Legends SD:</h4>
+    <div id="jnMLSD">
+        <h5>1. JUMLAH PEMAIN :</h5>
+        <p>Setiap Tim atau regu terdiri dari 5 Pemain Inti Dan 2 Cadangan* (Maks)</p>
+        <h5>2. FORMAT PERTANDINGAN :</h5>
+        <ol>
+            <li>Turnamen Menggunakan sistem eliminasi hingga semifinal.</li>
+            <li>Semifinal Menggunakan Sistem BO3 (Best Of 3).</li>
+            <li>Final Menggunakan Sistem BO5 (Best Of 5).</li>
+            <li>Final Akan menggunakan Roomtour</li>
+        </ol>
+        <h5>3. DURASI PERTANDINGAN :</h5>
+        <p>Waktu pertandingan untuk setiap babak adalah 30 menit.
+        Jika pertandingan belum selesai setelah waktu habis, Maka pemenang akan dihitung dari jumlah turet Terbanyak.
+        </p>
+        <h5>4. PERATURAN PERTANDINGAN :</h5>
+        <ol>
+            <li>Mode pertandingan: Custom Mode - Draft Pick 5 vs 5.</li>
+            <li>Peserta wajib hadir 45 menit sebelum pertandingan dimulai.
+            </li>
+            <li>Tim yang terlambat lebih dari 10 menit setelah jadwal akan dianggap mengundurkan diri (WO).</li>
+            <li>Pause match hanya diperbolehkan 2x Dengan masing² durasi 3 menit.</li>
+            <li>Peserta wajib menggunakan smartphone pribadi; dilarang menggunakan tablet atau perangkat sejenis. Peserta di persilakan untuk membawa powerbank masing-masing (opsional) karena panitia hanya mempersiapkan 1 kabel roll.</li>
+            <li>Jaringan disediakan masing-masing peserta (panitia tidak menyediakan Wi-Fi).</li>
+            <li>Dilarang menggunakan cheat, program ilegal, atau akun yang tidak sah. Pelanggaran berakibat diskualifikasi langsung.</li>
+            <li>Emote & recall diperbolehkan, tetapi dilarang Chat All, menggunakan  kata-kata kasar atau menghina.</li>
+            <li>Hanya panitia yang berhak menjadi spectator atau referee.</li>
+            <li>Peserta/tim yang melanggar peraturan umum akan dikenakan sanksi atau didiskualifikasi.</li>
+            <li>Tim yang telah terdaftar tidak dapat diganti dengan alasan apapun.</li>
+            <li>Tim akan diundi secara acak untuk menentukan bracket dan pertandingan akan dijalankan sesuai dengan susunan bracket.</li>
+            <li>Tim yang melakukan pelanggaran akan langsung didiskualifikasi.</li>
+
+        </ol>
+        <h5>5. BIAYA PENDAFTARAN DAN HADIAH</h5>
+        <p>Biaya pendaftaran: Rp150.000,00</p>
+        <p>Biaya Walk Out: Rp50.000,00</p>
+        <p>Hadiah:</p>
+        <p>-Juara 1: Rp750.000,00 + Piala & Sertifikat</p>
+        <p>-Juara 2: Rp500.000,00 + Piala & Sertifikat</p>
+    </div>
+
+    <form id="rgMLSD" enctype="multipart/form-data">
+        <h1>Registrasi</h1>
+        <h3>Daftar Nama Pemain</h3>
+        <textarea id="playersMLSD" name="players" rows="2" placeholder="Contoh:  Juliho Nathan, Richart Hung, ..." required></textarea>
+        <h3>Surat Keterangan Sekolah</h3>
+        <input type="file" id="schoolLetterMLSD" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+        <h3>Foto Kartu Pelajar</h3>
+        <input type="file" id="studentCardMLSD" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+        <h3>Nama Ketua Tim</h3>
+        <input type="text" id="leaderMLSD" name="leader" placeholder="Contoh: Adrian Lie" required>
+        <h3>Nama Penanggung Jawab</h3>
+        <input type="text" id="responsibleMLSD" name="responsible" placeholder="Contoh: Steven Santoso" required>
+        <h3>Nomor Telepon Penanggung Jawab</h3>
+        <input type="tel" id="phoneMLSD" name="phone" placeholder="Contoh: 08123456789" pattern="08[0-9]{8,11}" required>
+        <h3>Email Penanggung Jawab</h3>
+        <input type="email" id="emailMLSD" name="email" placeholder="Contoh: steven.Santoso51@gmail.com" required>
+        <h3>Bukti Transfer</h3>
+        <i><p class="rekening">Transfer to: BCA 8205261083, a/n DESY ARYANTI</p>
+        <p class="Rnote">Format: (Nama Lomba) - (Nama Sekolah)</p>
+        <p class="Rnote">Contoh: Basket Putra SMP - SMP Mutiara Bangsa 3</p></i>
+        <input type="file" id="transferMLSD" name="transfer" accept="image/jpeg,image/png,image/webp,application/pdf" required> <br><br>
+        <div class="BSubmit"><button type="submit" class="Submit button">Submit</button></div>
+        <br>
+        <p id="messageMLSD"></p>
+        <br>
+        <p class="ques">Punya pertanyaan? Silahkan hubungi 0857-7910-0458 (Cia)</p>
+    </form>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const supabaseUrl = "https://szlkwgsnuidolaskprla.supabase.co";
+    const supabaseKey = "sb_publishable__peGJSq1UaMWFQEmKoInWA_ex1cS7Ag";
+
+    const supabaseClient = window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
+
+    const bucketMLSD = "mobile-legends-sd-files";
+    const formMLSD = document.getElementById("rgMLSD");
+    const messageMLSD = document.getElementById("messageMLSD");
+
+    formMLSD.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const submitButton = formMLSD.querySelector(
+            'button[type="submit"]'
+        );
+
+        submitButton.disabled = true;
+        messageMLSD.textContent = "Submitting registration...";
+
+        let registrationId = null;
+        let registrationSaved = false;
+        const uploadedPaths = [];
+
+        try {
+            const playerNames =
+                document.getElementById("playersMLSD").value.trim();
+
+            const teamLeader =
+                document.getElementById("leaderMLSD").value.trim();
+
+            const responsibleName =
+                document.getElementById("responsibleMLSD").value.trim();
+
+            const responsiblePhone =
+                document.getElementById("phoneMLSD").value.trim();
+
+            const responsibleEmail =
+                document.getElementById("emailMLSD").value.trim();
+
+            if (
+                !playerNames ||
+                !teamLeader ||
+                !responsibleName ||
+                !responsiblePhone ||
+                !responsibleEmail
+            ) {
+                throw new Error("Please complete all required fields.");
+            }
+
+            const filesToUpload = [
+                {
+                    file: document.getElementById("schoolLetterMLSD").files[0],
+                    fileType: "school_letter",
+                    prefix: "SL"
+                },
+                {
+                    file: document.getElementById("studentCardMLSD").files[0],
+                    fileType: "student_card",
+                    prefix: "SC"
+                },
+                {
+                    file: document.getElementById("transferMLSD").files[0],
+                    fileType: "transfer_receipt",
+                    prefix: "TR"
+                }
+            ];
+
+            if (filesToUpload.some(item => !item.file)) {
+                throw new Error("Please upload all three required files.");
+            }
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+                "application/pdf"
+            ];
+
+            const maxSize = 5 * 1024 * 1024;
+
+            for (const item of filesToUpload) {
+                if (!allowedTypes.includes(item.file.type)) {
+                    throw new Error(
+                        "Only JPG, PNG, WEBP, and PDF files are allowed."
+                    );
+                }
+
+                if (item.file.size > maxSize) {
+                    throw new Error(
+                        "Each file must be 5 MB or smaller."
+                    );
+                }
+            }
+
+            registrationId = crypto.randomUUID();
+
+            const slug = playerNames
+                .normalize("NFKD")
+                .replace(/[^a-zA-Z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "")
+                .slice(0, 40) || "team";
+
+            const fileRecords = [];
+
+            // Upload files into this registration's folder.
+            for (const item of filesToUpload) {
+                const extension = item.file.name.includes(".")
+                    ? item.file.name.split(".").pop().toLowerCase()
+                    : "bin";
+
+                const fileCode =
+                    `${item.prefix}-${slug}-${crypto.randomUUID()}`;
+
+                const storagePath =
+                    `${registrationId}/${fileCode}.${extension}`;
+
+                const { error: uploadError } =
+                    await supabaseClient.storage
+                        .from(bucketMLSD)
+                        .upload(storagePath, item.file, {
+                            cacheControl: "3600",
+                            upsert: false,
+                            contentType: item.file.type
+                        });
+
+                if (uploadError) {
+                    throw new Error(
+                        "File upload failed: " + uploadError.message
+                    );
+                }
+
+                uploadedPaths.push(storagePath);
+
+                fileRecords.push({
+                    registration_id: registrationId,
+                    file_code: fileCode,
+                    file_type: item.fileType,
+                    storage_path: storagePath,
+                    original_filename: item.file.name,
+                    mime_type: item.file.type,
+                    file_size_bytes: item.file.size
+                });
+            }
+
+            // Save the registration details.
+            const { error: registrationError } =
+                await supabaseClient
+                    .from("mobile_legends_sd_registrations")
+                    .insert({
+                        id: registrationId,
+                        player_names: playerNames,
+                        team_leader: teamLeader,
+                        responsible_name: responsibleName,
+                        responsible_phone: responsiblePhone,
+                        responsible_email: responsibleEmail
+                    });
+
+            if (registrationError) {
+                throw new Error(
+                    "Registration failed: " + registrationError.message
+                );
+            }
+
+            registrationSaved = true;
+
+            // Save metadata for the uploaded files.
+            const { error: metadataError } =
+                await supabaseClient
+                    .from("mobile_legends_sd_files")
+                    .insert(fileRecords);
+
+            if (metadataError) {
+                throw new Error(
+                    "Registration was saved, but file metadata failed: " +
+                    metadataError.message +
+                    ". Please contact the organizer before retrying."
+                );
+            }
+
+            messageMLSD.textContent =
+                "Mobile Legends SD registration submitted successfully!";
+
+            formMLSD.reset();
+
+        } catch (error) {
+            console.error("Mobile Legends SD registration error:", error);
+
+            // Remove uploaded files only if registration wasn't saved.
+            if (
+                registrationId &&
+                !registrationSaved &&
+                uploadedPaths.length > 0
+            ) {
+                const { error: cleanupError } =
+                    await supabaseClient.storage
+                        .from(bucketMLSD)
+                        .remove(uploadedPaths);
+
+                if (cleanupError) {
+                    console.error("File cleanup error:", cleanupError);
+                }
+            }
+
+            messageMLSD.textContent =
+                error.message || "Something went wrong. Please try again.";
+
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
+
+</body>
+</html>

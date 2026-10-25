@@ -1,0 +1,274 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDSMP</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<header>
+    <button class="BButton button" onclick="window.location.href='ART.html'">
+        <strong><h2>←</h2></strong>
+    </button>
+</header>
+<body>
+    <h1>Digital Drawing SMP</h1>
+    <h4>Berikut juknis (Petunjuk Teknis) untuk bidang lomba Digital Drawing SMP:</h4>
+    <div id="jnDDSMP">
+        <h5>1. JUMLAH PEMAIN</h5>
+        <p>Lomba akan ada total 15 peserta atau lebih.</p>
+        <h5>2. DURASI LOMBA</h5>
+        <p>Durasi lomba digital drawing adalah 120 menit (2 jam). Dipersilahkan untuk menggunakan waktu tersebut
+        untuk menggambarkan karya yang bagus.</p>
+        <h5>3. ATURAN LOMBA</h5>
+        <ol>
+            <li>Peserta tidak diperbolehkan membawa hasil gambaran/karya yang sudah selesai atau sketsa sebelum
+            lomba untuk di lombakan.</li>
+            <li>Peserta lomba diwajibkan membawa alat/perangkat digital sendiri (Tablet/iPad/Smartphone/Laptop
+            beserta stylus pen dan charger), tidak diperbolehkan untuk membawa segala sesuatu yang bisa
+            membahayakan peserta lain.</li>
+            <li>Peserta tidak diperbolehkan mencetak gambaran online dari internet, menggunakan AI, atau meniru
+            karya orang lain, hanya boleh untuk referensi gambar.</li>
+            <li>Peserta disarankan untuk menjaga kebersihan dan kerapian saat menggambar.</li>
+            <li>Peserta tidak diperbolehkan mengganggu peserta lain yang sedang menggambar, di harapkan tidak
+            ribut dalam pelaksanaan lomba. Apalagi minat untuk merusak karya peserta lain, akan dilaksanakan
+            diskualifikasi langsung dari juri.</li>
+            <li>Peserta tidak diperbolehkan mendapatkan bantuan dari guru pendamping, juri, peserta lain, maupun
+            pihak lainnya selama lomba berlangsung.</li>
+            <li>Peserta diharapkan datang tepat waktu, apabila peserta terlambat maka panitia akan hanya menunggu
+            selama 10 menit. Lebih dari waktu tersebut, akan ada diskualifikasi.</li>
+            <li>Peserta diwajibkan memakai seragam yang rapi dan sopan dari sekolah masing-masing.</li>
+            <li>Peserta diwajibkan melakukan check-in sebelum lomba dimulai agar tidak ada kesalahan masuk lomba
+            atau belum di tulis dalam pendaftaran.</li>
+            <li>Pengumpulan karya dilakukan dalam format digital (PNG/JPG) serta melampirkan video
+            timelapse/proses pengerjaan (jika ada) kepada panitia di akhir durasi lomba.</li>
+            <li>Bila ada protest atau anda melihat peserta melanggar aturan ataupun melakukan pecurangan, dipersilahkan
+            untuk memberitahukan panitia. Diskualifikasi akan dibawakan jika ada pelanggaran.</li>
+        </ol>
+        <h5>3. BIAYA PENDAFTARAN & HADIAH</h5>
+        <p>Biaya pendaftaran: Rp100.000,00</p>
+        <p>Biaya Walk Out: Rp50.000,00</p>
+        <p>Hadiah:</p>
+        <p>-Juara 1: Rp750.000,00 + Piala & Sertifikat</p>
+        <p>-Juara 2: Rp500.000,00 + Piala & Sertifikat</p>
+        <p>-Juara 3: Rp350.000,00 + Piala & Sertifikat</p>
+    </div>
+
+    <form id="rgDDSMP" enctype="multipart/form-data">
+        <h1>Registrasi</h1>
+        <h3>Nama Individu</h3>
+        <textarea id="playersDDSMP" name="players" rows="2" placeholder="Contoh:  Juliho Nathan, Richart Hung, ..." required></textarea>
+        <h3>Foto Kartu Pelajar</h3>
+        <input type="file" id="studentCardDDSMP" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+        <h3>Nama Penanggung Jawab</h3>
+        <input type="text" id="responsibleDDSMP" name="responsible" placeholder="Contoh: Steven Santoso" required>
+        <h3>Nomor Telepon Penanggung Jawab</h3>
+        <input type="tel" id="phoneDDSMP" name="phone" placeholder="Contoh: 08123456789" pattern="08[0-9]{8,11}" required>
+        <h3>Email Penanggung Jawab</h3>
+        <input type="email" id="emailDDSMP" name="email" placeholder="Contoh: steven.Santoso51@gmail.com" required>
+        <h3>Bukti Transfer</h3>
+        <i><p class="rekening">Transfer to: BCA 8205261083, a/n DESY ARYANTI</p>
+        <p class="Rnote">Format: (Nama Lomba) - (Nama Sekolah)</p>
+        <p class="Rnote">Contoh: Basket Putra SMP - SMP Mutiara Bangsa 3</p></i>
+        <input type="file" id="transferDDSMP" name="transfer" accept="image/jpeg,image/png,image/webp,application/pdf" required> <br><br>
+        <div class="BSubmit"><button type="submit" class="Submit button">Submit</button></div>
+        <br>
+        <p id="messageDDSMP"></p>
+        <br>
+        <p class="ques">Punya pertanyaan? Silahkan hubungi 0812-2355-0566 (Vallen)</p>
+    </form>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://szlkwgsnuidolaskprla.supabase.co";
+const SUPABASE_KEY = "sb_publishable__peGJSq1UaMWFQEmKoInWA_ex1cS7Ag";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const BUCKET = "digital-drawing-smp-files";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+const form = document.getElementById("rgDDSMP");
+const message = document.getElementById("messageDDSMP");
+const submitButton = form.querySelector('button[type="submit"]');
+
+function makeSlug(value) {
+    return value.normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 50) || "digital-drawing-smp";
+}
+
+function getExtension(file) {
+    const extensions = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp",
+        "application/pdf": "pdf"
+    };
+
+    return extensions[file.type] || null;
+}
+
+function makeFileCode(prefix, slug) {
+    const uniquePart = crypto.randomUUID()
+        .replace(/-/g, "")
+        .slice(0, 12);
+
+    return `${prefix}-${slug}-${uniquePart}`;
+}
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    const participantName =
+        document.getElementById("playersDDSMP").value.trim();
+
+    const responsibleName =
+        document.getElementById("responsibleDDSMP").value.trim();
+
+    const responsiblePhone =
+        document.getElementById("phoneDDSMP").value.trim();
+
+    const responsibleEmail =
+        document.getElementById("emailDDSMP").value.trim();
+
+    const files = [
+        {
+            file: document.getElementById("studentCardDDSMP").files[0],
+            type: "student_card",
+            prefix: "SC"
+        },
+        {
+            file: document.getElementById("transferDDSMP").files[0],
+            type: "transfer_receipt",
+            prefix: "TR"
+        }
+    ];
+
+    // Validate both files before uploading.
+    for (const item of files) {
+        if (!item.file) {
+            message.textContent = "Please select both required files.";
+            return;
+        }
+
+        if (!getExtension(item.file)) {
+            message.textContent =
+                "Use JPG, PNG, WebP, or PDF files only.";
+            return;
+        }
+
+        if (item.file.size > MAX_FILE_SIZE) {
+            message.textContent =
+                "Each file must be 5 MB or smaller.";
+            return;
+        }
+    }
+
+    submitButton.disabled = true;
+    message.textContent = "Submitting registration...";
+
+    const registrationId = crypto.randomUUID();
+    const slug = makeSlug(participantName);
+    const uploadedPaths = [];
+    let registrationSaved = false;
+
+    try {
+        const fileRecords = [];
+
+        // 1. Upload files to private Storage.
+        for (const item of files) {
+            const extension = getExtension(item.file);
+            const fileCode = makeFileCode(item.prefix, slug);
+
+            const storagePath =
+                `${registrationId}/${fileCode}.${extension}`;
+
+            const { error: uploadError } = await supabaseClient
+                .storage
+                .from(BUCKET)
+                .upload(storagePath, item.file, {
+                    upsert: false,
+                    contentType: item.file.type
+                });
+
+            if (uploadError) throw uploadError;
+
+            uploadedPaths.push(storagePath);
+
+            fileRecords.push({
+                registration_id: registrationId,
+                file_code: fileCode,
+                file_type: item.type,
+                storage_path: storagePath,
+                original_filename: item.file.name,
+                mime_type: item.file.type,
+                file_size_bytes: item.file.size
+            });
+        }
+
+        // 2. Save the participant registration.
+        const { error: registrationError } = await supabaseClient
+            .from("digital_drawing_smp_registrations")
+            .insert({
+                id: registrationId,
+                participant_name: participantName,
+                responsible_name: responsibleName,
+                responsible_phone: responsiblePhone,
+                responsible_email: responsibleEmail
+            });
+
+        if (registrationError) throw registrationError;
+
+        registrationSaved = true;
+
+        // 3. Save file metadata.
+        const { error: metadataError } = await supabaseClient
+            .from("digital_drawing_smp_files")
+            .insert(fileRecords);
+
+        if (metadataError) throw metadataError;
+
+        message.textContent =
+            "Registration submitted successfully!";
+
+        form.reset();
+
+    } catch (error) {
+        console.error("Digital Drawing SMP error:", error);
+
+        // Clean up uploads if the registration row was not saved.
+        if (uploadedPaths.length > 0 && !registrationSaved) {
+            const { error: cleanupError } = await supabaseClient
+                .storage
+                .from(BUCKET)
+                .remove(uploadedPaths);
+
+            if (cleanupError) {
+                console.error("File cleanup error:", cleanupError);
+            }
+        }
+
+        message.textContent =
+            "Submission failed: " +
+            (error?.message || String(error));
+
+    } finally {
+        submitButton.disabled = false;
+    }
+});
+</script>
+</body>
+</html>
+
+</body>
+</html>

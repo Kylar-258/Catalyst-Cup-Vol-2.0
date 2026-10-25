@@ -1,0 +1,332 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVSD</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<header>
+    <button class="BButton button" onclick="window.location.href='ART.html'">
+        <strong><h2>←</h2></strong>
+    </button>
+</header>
+<body>
+    <h1>Solo Vocal SD</h1>
+    <h4>Berikut juknis (Petunjuk Teknis) untuk bidang lomba Solo Vocal:</h4>
+    <div id="jnSVSD">
+        <h5>1. JUMLAH PESERTA</h5>
+        <p>Setiap sekolah dapat mengirimkan 1-2 peserta untuk bertanding dalam format individu dari jenjang kelas 4-6 SD.</p>
+        <h5>2. SISTEM PENILAIAN</h5>
+        <ul>
+            <li>Teknik Vokal</li>
+            <li>Tempo</li>
+            <li>Intonasi</li>
+            <li>Artikulasi atau pelafalan</li>
+            <li>Penguasaan panggung</li>
+        </ul>
+        <h5>3. FORMAT LOMBA</h5>
+        <p>Setiap peserta wajib memilih satu lagu dari daftar lagu wajib yang telah disediakan dan satu lagu mandarin bebas beserta minus one (minimal 3 menit, maksimal 5 menit)</p>
+        <p>Lagu Wajib :</p>
+        <ul>
+            <li>明天会更好 (Míngtiān huì gèng hǎo) - Yan Meng Huang</li>
+            <li>我是一只小小鸟 (Wǒ shì yī zhǐ xiǎo xiǎo niǎo) - Zhao Chuan</li>
+            <li>相亲相爱 (Xiāngqīn xiāng ài) - UFO Stars</li>
+        </ul>
+        <h5>4. BIAYA PENDAFTARAN DAN HADIAH</h5>
+        <p>Biaya pendaftaran: Rp150.000,00</p>
+        <p>Biaya Walk Out: Rp50.000,00</p>
+        <p>Hadiah:</p>
+        <p>-Juara 1: Rp750.000,00 + Piala & Sertifikat</p>
+        <p>-Juara 2: Rp500.000,00 + Piala & Sertifikat</p>
+        <p>-Juara 3: Rp350.000,00 + Piala & Sertifikat</p>
+    </div>
+
+    <form id="rgSVSD" enctype="multipart/form-data">
+        <h1>Registrasi</h1>
+        <h3>Nama Individu</h3>
+        <textarea id="playersSVSD" name="players" rows="2" placeholder="Contoh:  Juliho Nathan, Richart Hung, ..." required></textarea>
+        <h3>Foto Kartu Pelajar</h3>
+        <input type="file" id="studentCardSVSD" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+        <h3>Nama Penanggung Jawab</h3>
+        <input type="text" id="responsibleSVSD" name="responsible" placeholder="Contoh: Steven Santoso" required>
+        <h3>Nomor Telepon Penanggung Jawab</h3>
+        <input type="tel" id="phoneSVSD" name="phone" placeholder="Contoh: 08123456789" pattern="08[0-9]{8,11}" required>
+        <h3>Email Penanggung Jawab</h3>
+        <input type="email" id="emailSVSD" name="email" placeholder="Contoh: steven.Santoso51@gmail.com" required>
+        <h3>Bukti Transfer</h3>
+        <i><p class="rekening">Transfer to: BCA 8205261083, a/n DESY ARYANTI</p>
+        <p class="Rnote">Format: (Nama Lomba) - (Nama Sekolah)</p>
+        <p class="Rnote">Contoh: Basket Putra SMP - SMP Mutiara Bangsa 3</p></i>
+        <input type="file" id="transferSVSD" name="transfer" accept="image/jpeg,image/png,image/webp,application/pdf" required> <br><br>
+        <div class="BSubmit"><button type="submit" class="Submit button">Submit</button></div>
+        <br>
+        <p id="messageSVSD"></p>
+        <br>
+        <p class="ques">Punya pertanyaan? Silahkan hubungi 0819-9709-0112 (Chloe)</p>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // ==========================================
+    // SUPABASE CONFIGURATION
+    // ==========================================
+
+    const SUPABASE_URL =
+        "https://szlkwgsnuidolaskprla.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable__peGJSq1UaMWFQEmKoInWA_ex1cS7Ag";
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+    // ==========================================
+    // CONFIGURATION
+    // ==========================================
+
+    const BUCKET_NAME = "solo-vocal-sd-files";
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+    const ALLOWED_TYPES = [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "application/pdf"
+    ];
+
+    // ==========================================
+    // GET HTML ELEMENTS
+    // ==========================================
+
+    const form = document.getElementById("rgSVSD");
+    const playersInput = document.getElementById("playersSVSD");
+    const studentCardInput = document.getElementById("studentCardSVSD");
+    const responsibleInput = document.getElementById("responsibleSVSD");
+    const phoneInput = document.getElementById("phoneSVSD");
+    const emailInput = document.getElementById("emailSVSD");
+    const transferInput = document.getElementById("transferSVSD");
+    const message = document.getElementById("messageSVSD");
+
+    // ==========================================
+    // HELPER FUNCTIONS
+    // ==========================================
+
+    function showMessage(text, isError = false) {
+        message.textContent = text;
+        message.style.color = "black";
+    }
+
+    function validateFile(file, label) {
+        if (!file) {
+            throw new Error(`${label} A file must be uploaded.`);
+        }
+
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            throw new Error(
+                `${label} Has to be in the form of JPG, PNG, WEBP, atau PDF.`
+            );
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+            throw new Error(
+                `${label} Not allowed to be more than 5 MB in size.`
+            );
+        }
+    }
+
+    function getFileExtension(file) {
+        const extensions = {
+            "image/jpeg": "jpg",
+            "image/png": "png",
+            "image/webp": "webp",
+            "application/pdf": "pdf"
+        };
+
+        return extensions[file.type];
+    }
+
+    // ==========================================
+    // UPLOAD FILE TO SUPABASE STORAGE
+    // ==========================================
+
+    async function uploadFile(file, registrationId, fileCode) {
+        const extension = getFileExtension(file);
+
+        // Keep files organized by registration ID.
+        const storagePath =
+            `${registrationId}/${fileCode}-${crypto.randomUUID()}.${extension}`;
+
+        const { error: uploadError } = await supabaseClient
+            .storage
+            .from(BUCKET_NAME)
+            .upload(storagePath, file, {
+                contentType: file.type,
+                upsert: false
+            });
+
+        if (uploadError) {
+            throw new Error(
+                `Gagal mengunggah ${file.name}: ${uploadError.message}`
+            );
+        }
+
+        return {
+            registration_id: registrationId,
+            file_code: fileCode,
+            storage_path: storagePath,
+            original_filename: file.name,
+            mime_type: file.type,
+            file_size_bytes: file.size
+        };
+    }
+
+    // ==========================================
+    // HANDLE FORM SUBMISSION
+    // ==========================================
+
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const submitButton = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        let registrationSaved = false;
+
+        submitButton.disabled = true;
+        showMessage("Registration is being processed...");
+
+        try {
+            // --------------------------------------
+            // 1. GET FORM VALUES
+            // --------------------------------------
+
+            const playerNames = playersInput.value.trim();
+            const responsibleName = responsibleInput.value.trim();
+            const responsiblePhone = phoneInput.value.trim();
+            const responsibleEmail = emailInput.value.trim();
+
+            const studentCard = studentCardInput.files[0];
+            const transferReceipt = transferInput.files[0];
+
+            // --------------------------------------
+            // 2. VALIDATE INPUTS
+            // --------------------------------------
+
+            if (
+                !playerNames ||
+                !responsibleName ||
+                !responsiblePhone ||
+                !responsibleEmail
+            ) {
+                throw new Error(
+                    "Please fill all the fields."
+                );
+            }
+
+            validateFile(studentCard, "Foto kartu pelajar");
+            validateFile(transferReceipt, "Bukti transfer");
+
+            // --------------------------------------
+            // 3. GENERATE REGISTRATION ID
+            // --------------------------------------
+
+            const registrationId = crypto.randomUUID();
+
+            // --------------------------------------
+            // 4. SAVE REGISTRATION TO SUPABASE
+            // --------------------------------------
+
+            const { error: registrationError } =
+                await supabaseClient
+                    .from("solo_vocal_sd_registrations")
+                    .insert({
+                        id: registrationId,
+                        player_names: playerNames,
+                        responsible_name: responsibleName,
+                        responsible_phone: responsiblePhone,
+                        responsible_email: responsibleEmail,
+                        registration_status: "pending"
+                    });
+
+            if (registrationError) {
+                throw new Error(
+                    `Failed to store registration: ${registrationError.message}`
+                );
+            }
+
+            registrationSaved = true;
+
+            // --------------------------------------
+            // 5. UPLOAD BOTH FILES
+            // --------------------------------------
+
+            showMessage(
+                "Registration data is being saved. Please wait..."
+            );
+
+            const studentCardMetadata = await uploadFile(
+                studentCard,
+                registrationId,
+                "student_card"
+            );
+
+            const transferMetadata = await uploadFile(
+                transferReceipt,
+                registrationId,
+                "transfer_receipt"
+            );
+
+            // --------------------------------------
+            // 6. SAVE FILE METADATA
+            // --------------------------------------
+
+            const { error: filesError } = await supabaseClient
+                .from("solo_vocal_sd_files")
+                .insert([
+                    studentCardMetadata,
+                    transferMetadata
+                ]);
+
+            if (filesError) {
+                throw new Error(
+                    `Data has been uploaded, but metadata has failed to be saved: ${filesError.message}`
+                );
+            }
+
+            // --------------------------------------
+            // 7. SUCCESS
+            // --------------------------------------
+
+            showMessage(
+                "Solo Vocal SD registration submitted successfully! Status: pending verification."
+            );
+
+            form.reset();
+
+        } catch (error) {
+            console.error("SVSD registration error:", error);
+
+            if (registrationSaved) {
+                showMessage(
+                    "Registration has been saved, but archives has not been saved. Don't register twice. Contact the comittee to check your registration.",
+                    true
+                );
+            } else {
+                showMessage(
+                    error.message || "Error. Try again.",
+                    true
+                );
+            }
+
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>

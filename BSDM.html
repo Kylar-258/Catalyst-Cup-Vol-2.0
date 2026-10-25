@@ -1,0 +1,269 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSDM</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<header>
+    <button class="BButton button" onclick="window.location.href='indexx.html'">
+        <strong><h2>←</h2></strong>
+    </button>
+</header>
+<body>
+    <h1>Basket SD</h1>
+    <h4>Berikut juknis (Petunjuk Teknis) untuk bidang lomba Basket SD:</h4>
+    <div id="jnBSDM">
+        <h5>1. JUMLAH PERTANDINGAN</h5>
+        <p>Setiap tim terdiri dari 3 pemain inti, maksimal 1 pemain cadangan dan maksimal 2 official.</p>
+        <h5>2. FORMAT PERTANDINGAN</h5>
+        <p>Pertandingan menggunakan sistem gugur.</p>
+        <h5>3. DURASI PERTANDINGAN</h5>
+        <p>Waktu pertandingan adalah 10 menit dengan waktu kotor setiap tim memiliki 1 time out (1 menit).</p>
+        <h5>4. PERATURAN PERTANDINGAN</h5>
+        <ol>
+            <li>Setiap tim memiliki 3 pemain inti, maksimal 1 pemain cadangan Dan maksimal 2 official.</li>
+            <li>Setiap tim wajib memiliki satu jersey berwarna terang dan gelap.</li>
+            <li>Setiap tim wajib didampingi oleh guru pembimbing atau pelatih, dan nomor handphone dari guru atau pelatih tersebut. Wajib disertai foto pas (3x4) di formulir pendaftaran.</li>
+            <li>Apabila tim tersebut tidak didampingi oleh guru pendamping, tim tersebut tidak diperbolehkan bertanding.</li>
+            <li>Sistem pertandingan adalah single-elimination bracket.</li>
+            <li>Pembayaran wajib dilakukuan saat pendaftaran.</li>
+            <li>Jika ditemukam ada pemain yang tidak terdaftar atau bukan murid dari sekolah yang bersangkutan, maka tim tersebut akan didiskualifikasi.</li>
+            <li>Setiap sekolah hanya boleh mengirim satu tim untuk setiap kategori.</li>
+            <li>Pertauran yang digunakan adalah peraturan dari PERBASI.</li>
+        </ol>
+        <h5>5. BIAYA PENDAFTARAN & HADIAH</h5>
+        <p>Biaya pendaftaran: Rp150.000,00</p>
+        <p>Biaya Walk Out: Rp50.000,00</p>
+        <p>Hadiah:</p>
+        <p>-Juara 1: Rp750.000,00 + Piala & Sertifikat</p>
+        <p>-Juara 2: Rp500.000,00 + Piala & Sertifikat</p>
+    </div>
+
+    <form id="rgBSDM" enctype="multipart/form-data">
+        <h1>Registrasi</h1>
+        <h3>Daftar Nama Pemain</h3>
+        <textarea id="playersBSDM" name="players" rows="2" placeholder="Contoh:  Juliho Nathan, Richart Hung, ..." required></textarea>
+        <h3>Surat Keterangan Sekolah</h3>
+        <input type="file" id="schoolLetterBSDM" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+        <h3>Foto Kartu Pelajar</h3>
+        <input type="file" id="studentCardBSDM" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+        <h3>Nama Ketua Tim</h3>
+        <input type="text" id="leaderBSDM" name="leader" placeholder="Contoh: Adrian Lie" required>
+        <h3>Nama Penanggung Jawab</h3>
+        <input type="text" id="responsibleBSDM" name="responsible" placeholder="Contoh: Steven Santoso" required>
+        <h3>Nomor Telepon Penanggung Jawab</h3>
+        <input type="tel" id="phoneBSDM" name="phone" placeholder="Contoh: 08123456789" pattern="08[0-9]{8,11}" required>
+        <h3>Email Penanggung Jawab</h3>
+        <input type="email" id="emailBSDM" name="email" placeholder="Contoh: steven.Santoso51@gmail.com" required>
+        <h3>Bukti Transfer</h3>
+        <i><p class="rekening">Transfer to: BCA 8205261083, a/n DESY ARYANTI</p>
+        <p class="Rnote">Format: (Nama Lomba) - (Nama Sekolah)</p>
+        <p class="Rnote">Contoh: Basket Putra SMP - SMP Mutiara Bangsa 3</p></i>
+        <input type="file" id="transferBSDM" name="transfer" accept="image/jpeg,image/png,image/webp,application/pdf" required> <br><br>
+        <div class="BSubmit"><button type="submit" class="Submit button">Submit</button></div>
+        <br>
+        <p id="messageBSDM"></p>
+        <br>
+        <p class="ques">Punya pertanyaan? Silahkan hubungi 0812-8809-1808 (Reynaldo)</p>
+    </form>
+
+    
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://szlkwgsnuidolaskprla.supabase.co";
+const SUPABASE_KEY = "sb_publishable__peGJSq1UaMWFQEmKoInWA_ex1cS7Ag";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+const BUCKET = "basket-sd-files";
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+const form = document.getElementById("rgBSDM");
+const message = document.getElementById("messageBSDM");
+const submitButton = form.querySelector('button[type="submit"]');
+
+// Make a readable slug for file codes.
+function makeSlug(value) {
+    return value
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 50) || "basket-sd";
+}
+
+// Only allow file types supported by the bucket.
+function getExtension(file) {
+    const extensions = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp",
+        "application/pdf": "pdf"
+    };
+
+    return extensions[file.type] || null;
+}
+
+// Generate unique, readable file codes.
+function makeFileCode(prefix, slug) {
+    const uniquePart = crypto.randomUUID()
+        .replace(/-/g, "")
+        .slice(0, 12);
+
+    return `${prefix}-${slug}-${uniquePart}`;
+}
+
+form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+
+    const players =
+        document.getElementById("playersBSDM").value.trim();
+
+    const teamLeader =
+        document.getElementById("leaderBSDM").value.trim();
+
+    const responsibleName =
+        document.getElementById("responsibleBSDM").value.trim();
+
+    const responsiblePhone =
+        document.getElementById("phoneBSDM").value.trim();
+
+    const responsibleEmail =
+        document.getElementById("emailBSDM").value.trim();
+
+    const files = [
+        {
+            file: document.getElementById("schoolLetterBSDM").files[0],
+            type: "school_letter",
+            prefix: "SL"
+        },
+        {
+            file: document.getElementById("studentCardBSDM").files[0],
+            type: "student_card",
+            prefix: "SC"
+        },
+        {
+            file: document.getElementById("transferBSDM").files[0],
+            type: "transfer_receipt",
+            prefix: "TR"
+        }
+    ];
+
+    // Validate all files before uploading anything.
+    for (const item of files) {
+        if (!item.file) {
+            message.textContent = "Please select all three required files.";
+            return;
+        }
+
+        if (!getExtension(item.file)) {
+            message.textContent =
+                "Files must be JPG, PNG, WebP, or PDF.";
+            return;
+        }
+
+        if (item.file.size > MAX_FILE_SIZE) {
+            message.textContent =
+                "Each file must be 5 MB or smaller.";
+            return;
+        }
+    }
+
+    submitButton.disabled = true;
+    message.textContent = "Submitting Basket SD registration...";
+
+    const registrationId = crypto.randomUUID();
+
+    // No school/team name field exists, so use the team leader's name.
+    const slug = makeSlug(teamLeader);
+
+    const uploadedPaths = [];
+
+    try {
+        // 1. Upload the three files to private Storage.
+        const fileRecords = [];
+
+        for (const item of files) {
+            const extension = getExtension(item.file);
+            const fileCode = makeFileCode(item.prefix, slug);
+
+            const storagePath =
+                `${registrationId}/${fileCode}.${extension}`;
+
+            const { error: uploadError } = await supabaseClient
+                .storage
+                .from(BUCKET)
+                .upload(storagePath, item.file, {
+                    upsert: false,
+                    contentType: item.file.type
+                });
+
+            if (uploadError) throw uploadError;
+
+            uploadedPaths.push(storagePath);
+
+            fileRecords.push({
+                registration_id: registrationId,
+                file_code: fileCode,
+                file_type: item.type,
+                storage_path: storagePath,
+                original_filename: item.file.name,
+                mime_type: item.file.type,
+                file_size_bytes: item.file.size
+            });
+        }
+
+        // 2. Save the registration.
+        // The database supplies registration_status = "pending".
+        const { error: registrationError } = await supabaseClient
+            .from("basket_sd_registrations")
+            .insert({
+                id: registrationId,
+                players: players,
+                team_leader: teamLeader,
+                responsible_name: responsibleName,
+                responsible_phone: responsiblePhone,
+                responsible_email: responsibleEmail
+            });
+
+        if (registrationError) throw registrationError;
+
+        // 3. Save the file metadata.
+        const { error: metadataError } = await supabaseClient
+            .from("basket_sd_files")
+            .insert(fileRecords);
+
+        if (metadataError) throw metadataError;
+
+        message.textContent =
+            "Registration submitted successfully! Thank you.";
+
+        form.reset();
+
+    } catch (error) {
+        console.error("Basket SD registration error:", error);
+
+        message.textContent =
+            "Submission failed: " +
+            (error?.message || String(error));
+
+        // Files may already have uploaded if a later step failed.
+        // Check Supabase Storage and both tables before retrying.
+    } finally {
+        submitButton.disabled = false;
+    }
+});
+</script>
+</body>
+</html>
+
+</body>
+</html>
