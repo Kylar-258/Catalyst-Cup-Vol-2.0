@@ -346,7 +346,7 @@ table, th, td {
 #rgFSD, #rgFSMP, #rgBAND, #rgBSDM, #rgBSMPA, #rgBSMPI, #rgDDSMP, #rgDSD,  #rgMDSD, #rgMDSMP, #rgMLSD,  #rgMLSMP,  #rgSBSD, #rgSMSMP, #rgSTSD, #rgSVSD, #rgSVSMP {
     background-color: white;
     margin: 20px 0px 0px;
-    padding: 0px 10px 10px;
+    padding: 0px 20px 10px;
     border-radius: 20px;
 }
 
@@ -417,4 +417,24 @@ img {
 
 #messageSVSD.error-message, #message.SVSMP.error-message {
     color: red;
+}
+
+.Titlejn {
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 14px;
+    padding: 10px 10px 10px;
+    margin: 5px 5px 5px;
+    min-width: 70vw;
+    max-width: 70vw;
+}
+
+.Descjn {
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 10px 10px 10px;
+    margin: 5px 5px 5px;
+    min-width: 80vw;
+    max-width: 80vw;
 }
