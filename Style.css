@@ -351,7 +351,7 @@ table, th, td {
 }
 
 #rgFSD input, #rgFSD textarea, #rgFSMP input, #rgFSMP textarea, #rgBAND input, #rgBAND textarea, #rgBSDM input, #rgBSDM textarea, #rgBSMPA input, #rgBSMPA textarea, #rgBSMPI input, #rgBSMPI textarea, #rgDDSMP input,  #rgDDSMP textarea,  #rgDSD input, #rgDSD textarea,  #rgMDSD input, #rgMDSD textarea, #rgMDSMP input, #rgMDSMP textarea, #rgMLSD input, #rgMLSD textarea, #rgMLSMP input, #rgMLSMP textarea,  #rgSBSD input, #rgSBSD textarea, #rgSMSMP input, #rgSMSMP textarea, #rgSTSD input, #rgSTSD textarea, #rgSVSD input, #rgSVSD textarea, #rgSVSMP input, #rgSVSMP textarea {
-    width: 75vw;
+    width: 80vw;
     height: 30px;
     padding: 5px;
     border-radius: 8px;
