@@ -448,3 +448,151 @@ img {
 #jnDO {
     text-indent: 0px;
 }
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.popup-box {
+    background: white;
+    color: black;
+    width: 100%;
+    max-width: 420px;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    animation: popupAppear 0.3s ease;
+}
+
+.popup-icon {
+    background: #d1fae5;
+    color: #059669;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    margin: 0 auto 15px;
+}
+
+.popup-box h2 {
+    margin-bottom: 10px;
+}
+
+.popup-box p {
+    line-height: 1.6;
+}
+
+.popup-box hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.popup-box button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+    max-height: 50px;
+    min-height: 50px;
+    width: 65px;
+}
+
+.popup-box button:hover {
+    background: #1d4ed8;
+}
+
+@keyframes popupAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.registration-id {
+    background: #f1f5f9;
+    padding: 5px 12px 24px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.registration-id h3 {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.registration-id p {
+    font-size: 13px;
+    font-weight: bold;
+    color: #1e293b;
+    overflow-wrap: anywhere;
+}
+
+.id-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.id-container p {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 13px;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+#copyIdButton {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+#copyIdButton:hover {
+    background: #1d4ed8;
+}
+
+.id-container #copyIdButton {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: fit-content !important;
+    flex: 0 0 auto !important;
+
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    height: auto !important;
+
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+
+    margin: 0px 10px 0px;
+}
