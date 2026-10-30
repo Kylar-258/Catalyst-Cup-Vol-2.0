@@ -509,7 +509,7 @@ img {
     font-size: 16px;
     max-height: 50px;
     min-height: 50px;
-    width: auto;
+    max-width: 400px !important;
 }
 
 .popup-box button:hover {
