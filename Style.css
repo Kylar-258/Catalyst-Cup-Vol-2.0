@@ -464,7 +464,7 @@ img {
     background: white;
     color: black;
     width: 100%;
-    max-width: 420px;
+    max-width: 500px;
     padding: 30px;
     border-radius: 15px;
     text-align: center;
@@ -509,7 +509,7 @@ img {
     font-size: 16px;
     max-height: 50px;
     min-height: 50px;
-    width: 65px;
+    width: auto;
 }
 
 .popup-box button:hover {
