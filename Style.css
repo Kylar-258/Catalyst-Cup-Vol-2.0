@@ -599,3 +599,26 @@ img {
 
     margin: 0px 10px 0px;
 }
+
+#successPopup .popup-box button {
+    all: unset !important;
+
+    display: block !important;
+    box-sizing: border-box !important;
+
+    width: 130px !important;
+    min-width: 0 !important;
+    max-width: 130px !important;
+
+    padding: 10px 15px !important;
+    margin: 20px auto 0 !important;
+
+    background: #2563eb !important;
+    color: white !important;
+
+    font-size: 15px !important;
+    text-align: center !important;
+
+    border-radius: 8px !important;
+    cursor: pointer !important;
+}
