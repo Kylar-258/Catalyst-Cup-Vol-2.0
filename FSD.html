@@ -94,6 +94,46 @@
         <p class="ques">Punya pertanyaan? Silahkan hubungi 0811-8089-5229 (Richart)</p>
     </form>
 
+    <div id="successPopup" class="popup-overlay">
+    <div class="popup-box">
+        <div class="popup-icon">✓</div>
+
+        <h2>Registration Successful!</h2>
+
+        <p>
+            Your Futsal SD registration has been
+            submitted successfully.
+        </p>
+
+        <hr>
+
+        <h3>What's next?</h3>
+
+        <p>
+            For more information regarding the competition,
+            schedules, and further announcements, please join the group link below: 
+        </p>
+
+        <a href="https://chat.whatsapp.com/B8islMYQKjLIh1SCK9NPF1?s=cl&p=a&iam=2">Whatsapp Group Link</a>
+
+        <div class="registration-id">
+            <h3>Registration ID</h3>
+            
+            <div class="id-container">
+                <p id="popupRegistrationId">-</p>
+                <button type="button" id="copyIdButton" onclick="copyRegistrationId()">
+                    Copy
+                </button>
+            </div>
+        </div>
+
+        <button class="PopupButton" type="button" onclick="closePopup()">
+            Ok
+        </button>
+        
+    </div>
+</div>
+
     
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -108,6 +148,42 @@
     const bucketFSD = "futsal-sd-files";
     const formFSD = document.getElementById("rgFSD");
     const messageFSD = document.getElementById("messageFSD");
+
+    function showPopup(registrationId) {
+    document.getElementById("popupRegistrationId").textContent =
+        registrationId;
+
+    document.getElementById("successPopup").style.display = "flex";
+}
+
+function closePopup() {
+    document.getElementById("successPopup").style.display = "none";
+}
+
+async function copyRegistrationId() {
+    const registrationId =
+        document.getElementById("popupRegistrationId").textContent;
+
+    const button = document.getElementById("copyIdButton");
+
+    try {
+        await navigator.clipboard.writeText(registrationId);
+
+        button.textContent = "Copied!";
+
+        setTimeout(() => {
+            button.textContent = "Copy";
+        }, 2000);
+
+    } catch (error) {
+        console.error("Copy failed:", error);
+        button.textContent = "Failed";
+
+        setTimeout(() => {
+            button.textContent = "Copy";
+        }, 2000);
+    }
+}
 
     formFSD.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -283,6 +359,8 @@
                 "Futsal SD registration submitted successfully!";
 
             formFSD.reset();
+
+            showPopup(registrationId);
 
         } catch (error) {
             console.error("Futsal SD registration error:", error);
